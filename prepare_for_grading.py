@@ -17,12 +17,12 @@ def ready_submissions_for_grading():
     df_grades = pd.read_excel(config.file_grades)
 
     for _, row in df_grades.iterrows():
-        student_zip_file = os.path.join(config.submissions_dir, row[columns[0]] + '.zip')
+        student_zip_file = os.path.join(config.submissions_dir, row[columns.student_name] + '.zip')
         if not os.path.isfile(student_zip_file):
             continue
 
-        student_submission_dir = os.path.join(config.submissions_dir, row[columns[0]])
-        student_grading_dir = os.path.join(config.submissions_with_grader_dir, row[columns[0]])
+        student_submission_dir = os.path.join(config.submissions_dir, row[columns.student_name])
+        student_grading_dir = os.path.join(config.submissions_with_grader_dir, row[columns.student_name])
 
         with open(config.file_grader_dir_struct, 'r') as file:
             dir_names = [line.strip() for line in file if line.strip()]

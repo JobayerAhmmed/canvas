@@ -17,18 +17,18 @@ def update_early_days():
 
     df = pd.read_excel(config.file_grades)
 
-    df[columns[4]] = df.apply(
+    df[columns.early_days] = df.apply(
         lambda row: calculate_early_days(
-            due_date, row[columns[2]]),
+            due_date, row[columns.submitted_at]),
         axis=1)
         
-    early_days_dict = dict(zip(df[columns[1]], df[columns[4]]))
+    early_days_dict = dict(zip(df[columns.student_id], df[columns.early_days]))
 
     wb = load_workbook(config.file_grades)
     ws = wb.active
 
-    student_id_col = utils.find_column(ws, columns[1])
-    early_days_col = utils.find_column(ws, columns[4])
+    student_id_col = utils.find_column(ws, columns.student_id)
+    early_days_col = utils.find_column(ws, columns.early_days)
     
     if student_id_col and early_days_col:
         for row in range(2, ws.max_row + 1):

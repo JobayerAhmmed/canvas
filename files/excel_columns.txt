@@ -1,11 +1,14 @@
-Student Name
-Student ID
-Submitted At
-Late Hours
-Early Days
-Late Deduct
-Early Points
-Automatic Grading
-Manual Grading
-Total
-Comments
+student_name=Student Name
+student_id=Student ID
+submitted_at=Submitted At
+late_hours=Late Hours
+early_days=Early Days
+late_deduct=Late Deduct (10%)
+early_points=Early Points (10%)
+auto=Automated Grading (0)
+manual1=Comments (10)
+manual2=Read from File (20)
+manual3=Decode with tree (30)
+manual4=Tree construction (40)
+total=Total
+comments=Comments

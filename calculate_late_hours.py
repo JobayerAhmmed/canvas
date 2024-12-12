@@ -17,18 +17,18 @@ def update_late_hours():
 
     df = pd.read_excel(config.file_grades)
 
-    df[columns[3]] = df.apply(
+    df[columns.late_hours] = df.apply(
         lambda row: calculate_late_hours(
-            extended_due_date, row[columns[2]]),
+            extended_due_date, row[columns.submitted_at]),
         axis=1)
         
-    late_hours_dict = dict(zip(df[columns[1]], df[columns[3]]))
+    late_hours_dict = dict(zip(df[columns.student_id], df[columns.late_hours]))
 
     wb = load_workbook(config.file_grades)
     ws = wb.active 
     
-    student_id_col = utils.find_column(ws, columns[1])
-    late_hours_col = utils.find_column(ws, columns[3])
+    student_id_col = utils.find_column(ws, columns.student_id)
+    late_hours_col = utils.find_column(ws, columns.late_hours)
 
     if student_id_col and late_hours_col:
         for row in range(2, ws.max_row + 1):

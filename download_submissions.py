@@ -13,8 +13,8 @@ import utils
 
 
 def download_submissions():
-    """Download student submissions and update Submitted At column."""
-    print('Downloading student submissions ...')
+    """Download students submissions and update Submitted At column."""
+    print('Downloading students submissions ...')
 
     canvas = Canvas(config.api_url, config.api_key)
     course = canvas.get_course(config.course_id)
@@ -24,21 +24,22 @@ def download_submissions():
 
     df = pd.read_excel(config.file_grades)
 
-    df[columns[2]] = pd.to_datetime(df[columns[2]], # Submitted At
+    # Convert 'submitted_at' column to datetime type
+    df[columns.submitted_at] = pd.to_datetime(df[columns.submitted_at],
                                               errors='coerce')
 
     bar = progressbar.ProgressBar(max_value=df.shape[0],
                                   redirect_stdout=True).start()
     for index, row in df.iterrows():
-        student_name = row[columns[0]]
-        student_id = row[columns[1]]
+        student_name = row[columns.student_name]
+        student_id = row[columns.student_id]
 
         submission = assignment.get_submission(student_id)
 
         if submission and submission.attachments:
             submitted_at = submission.submitted_at # UTC format: 2024-09-22T04:19:51Z
             submitted_at_local = utils.convert_utc_to_iowa(submitted_at)
-            df.at[index, columns[2]] = pd.to_datetime(submitted_at_local) # Submitted At
+            df.at[index, columns.submitted_at] = pd.to_datetime(submitted_at_local)
             latest_attachment = submission.attachments[-1]
             file_url = latest_attachment.url
             file_extension = os.path.splitext(latest_attachment.filename)[1]
@@ -53,13 +54,13 @@ def download_submissions():
         bar.update(index)
     bar.finish()
 
-    submitted_at_dict = dict(zip(df[columns[1]], df[columns[2]]))
+    submitted_at_dict = dict(zip(df[columns.student_id], df[columns.submitted_at]))
 
     wb = load_workbook(config.file_grades)
     ws = wb.active
 
-    student_id_col = utils.find_column(ws, columns[1])
-    submitted_at_col = utils.find_column(ws, columns[2])
+    student_id_col = utils.find_column(ws, columns.student_id)
+    submitted_at_col = utils.find_column(ws, columns.submitted_at)
 
     if student_id_col and submitted_at_col:
         for row in range(2, ws.max_row + 1):

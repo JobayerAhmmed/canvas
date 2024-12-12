@@ -2,6 +2,7 @@ import os
 
 import pandas as pd
 from canvasapi import Canvas
+import progressbar
 
 import config
 
@@ -15,7 +16,9 @@ def get_student_names_ids():
     canvas = Canvas(config.api_url, config.api_key)
     course = canvas.get_course(config.course_id)
 
+    bar = progressbar.ProgressBar(max_value=progressbar.UnknownLength)
     students = course.get_users(enrollment_type=['student'])
+    bar.finish()
 
     student_data = []
     for student in students:

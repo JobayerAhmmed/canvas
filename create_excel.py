@@ -10,6 +10,9 @@ from config import columns
 
 
 def create_excel_with_student_names_and_headers():
+    """Creates grades.xlsx with student names, IDs, and 
+    column names defined in excel_columns.txt.
+    """
     print('Creating grades.xlsx ...')
 
     if os.path.isfile(config.file_grades):
@@ -25,7 +28,7 @@ def create_excel_with_student_names_and_headers():
     wb_grades = Workbook()
     ws_grades = wb_grades.active
 
-    for index, header in enumerate(columns, start=1):
+    for index, header in enumerate(columns.values(), start=1):
         ws_grades.cell(row=1, column=index, value=header)
 
     for row_index, row in enumerate(ws_students.iter_rows(min_row=2, max_col=2,
@@ -48,13 +51,13 @@ def sort_by_student_name():
     ]
 
     try:
-        student_name_col = header.index(columns[0]) # Student Name
+        name_col_index = header.index(columns.student_name)
     except ValueError:
-        print(f"Column '{columns[0]}' not found!")
+        print("Column 'Student Name' not found!")
         workbook.close()
         exit()
 
-    data_rows.sort(key=lambda x: x[student_name_col])
+    data_rows.sort(key=lambda x: x[name_col_index])
 
     for row in worksheet.iter_rows(min_row=2, max_row=worksheet.max_row,
                                    max_col=worksheet.max_column):
